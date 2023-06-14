@@ -31,7 +31,7 @@ class Grafo{
         int existeVertice(std::string);
         int parseArquivoEntrada(std::vector<std::string> *, std::vector<std::string> *, std::vector<float> *);
 
-        // djikstra
+        std::vector<std::string> removeDuplicados(std::vector<std::string>);
 };
 
 #endif

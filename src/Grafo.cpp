@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <bits/stdc++.h>
-#include <set>
 #include <utility>
 #include "Grafo.h"
 
@@ -172,90 +171,93 @@ void Grafo::mostraMatrizAdjacencia(){
     }
 }
 
-float Grafo::mostraMenorCaminho(std::string nomeVerticeOrigem, std::string nomeVerticeDestino, int saida){
-    // mostra o menor caminho entre dois vertices usando Dijkstra
+float Grafo::mostraMenorCaminho(std::string nomeVerticeOrigem, std::string nomeVerticeDestino, int saida) {
+    // Mostra o menor caminho entre dois vértices usando Dijkstra
 
     unsigned indiceVerticeDestino, indiceVerticeOrigem;
     std::vector<std::string> caminho;
 
-    // verifica se os vertices existem
-    if(!existeVertice(nomeVerticeOrigem) || !existeVertice(nomeVerticeDestino)){
-        std::cout << "Erro: Vertice nao encontrado." << std::endl;
+    // Verifica se os vértices existem
+    if (!existeVertice(nomeVerticeOrigem) || !existeVertice(nomeVerticeDestino)) {
+        std::cout << "Erro: Vértice não encontrado." << std::endl;
         return -1;
     }
 
-    // inicio do algoritmo de Dijkstra
-    int verticesVisitados[vertices.size()]; // cada item representa um vertice, 0 para não visitado, 1 para visitado
-    float distancia[vertices.size()]; // cada item representa a distancia do vertice de origem para o vertice do indice
+    // Início do algoritmo de Dijkstra
+    int verticesVisitados[vertices.size()]; // Cada item representa um vértice: 0 para não visitado, 1 para visitado
+    float distancia[vertices.size()]; // Cada item representa a distância do vértice de origem para o vértice do índice
+    int antecessor[vertices.size()]; // Cada item representa o antecessor do vértice no menor caminho
 
-    for(unsigned i = 0; i < vertices.size(); i++){
+    for (unsigned i = 0; i < vertices.size(); i++) {
         verticesVisitados[i] = 0;
         distancia[i] = -1;
+        antecessor[i] = -1;
     }
 
-    // encontra o indice do vertice de origem
-    (void) getVertice(nomeVerticeOrigem, &indiceVerticeOrigem);
+    // Encontra o índice do vértice de origem
+    (void)getVertice(nomeVerticeOrigem, &indiceVerticeOrigem);
 
-    // inicializa a distancia do vertice de origem para a origem
-    distancia[indiceVerticeOrigem] = 0; // valor padrão é zero
-    // caso exista uma aresta entre o vertice de origem e ele mesmo, a distancia é o peso da aresta
-    for(auto aresta : arestas){
-        if(aresta->origem->getNome() == nomeVerticeOrigem && aresta->destino->getNome() == nomeVerticeOrigem){
+    // Inicializa a distância do vértice de origem para ele mesmo
+    distancia[indiceVerticeOrigem] = 0; // Valor padrão é zero
+    // Caso exista uma aresta entre o vértice de origem e ele mesmo, a distância é o peso da aresta
+    for (auto aresta : arestas) {
+        if (aresta->origem->getNome() == nomeVerticeOrigem && aresta->destino->getNome() == nomeVerticeOrigem) {
             distancia[indiceVerticeOrigem] = aresta->getPeso();
             break;
         }
     }
 
-    // cria um fila de prioridade para armazenar os vertices (indice, distancia)
+    // Cria uma fila de prioridade para armazenar os vértices (índice, distância)
     std::vector<std::pair<unsigned, float>> filaPrioridade;
     filaPrioridade.push_back(std::make_pair(indiceVerticeOrigem, distancia[indiceVerticeOrigem]));
 
-    // enquanto a fila de prioridade não estiver vazia
-    while(!filaPrioridade.empty()){
+    // Enquanto a fila de prioridade não estiver vazia
+    while (!filaPrioridade.empty()) {
 
-        // remove o primeiro elemento da fila de prioridade
+        // Remove o primeiro elemento da fila de prioridade
         std::pair<unsigned, float> verticeAtual = filaPrioridade.front();
         filaPrioridade.erase(filaPrioridade.begin());
 
-        // verifica se o vertice atual já foi visitado
-        if(verticesVisitados[verticeAtual.first] == 0){
-            // se não foi visitado, marca como visitado
-            verticesVisitados[verticeAtual.first]= 1;
+        // Verifica se o vértice atual já foi visitado
+        if (verticesVisitados[verticeAtual.first] == 0) {
+            // Se não foi visitado, marca como visitado
+            verticesVisitados[verticeAtual.first] = 1;
 
-            // verifica se o vertice atual é o vertice de destino
-            if(vertices[verticeAtual.first]->getNome() == nomeVerticeDestino){
-                // se for, mostra o caminho
-
-
-                if(saida == 1){
-                    // dropa os vértices duplicados
-                    std::set<std::string> tempSet(caminho.begin(), caminho.end() );
-                    caminho.assign( tempSet.begin(), tempSet.end() );
-
-                    for(unsigned i = 0; i < caminho.size(); i++){
+            // Verifica se o vértice atual é o vértice de destino
+            if (vertices[verticeAtual.first]->getNome() == nomeVerticeDestino) {
+                // Se for, mostra o caminho
+                if (saida == 1) {
+                    unsigned indiceVertice = verticeAtual.first;
+                    while (indiceVertice != indiceVerticeOrigem) {
+                        caminho.insert(caminho.begin(), vertices[indiceVertice]->getNome());
+                        indiceVertice = antecessor[indiceVertice];
+                    }
+                    caminho.insert(caminho.begin(), nomeVerticeOrigem);
+                    for (unsigned i = 0; i < caminho.size() - 1; i++) {
                         std::cout << caminho[i] << "->";
                     }
-                    std::cout << nomeVerticeDestino << std::endl;
+                    std::cout << caminho.back() << std::endl;
                 }
-                
-                //e retorna a distancia
+
+                // Retorna a distância
                 return verticeAtual.second;
             }
 
-            // para cada aresta do vertice atual
-            for(auto aresta : arestas){
-                // verifica se a aresta é do vertice atual para outro vertice
-                if(aresta->origem->getNome() == vertices[verticeAtual.first]->getNome()){
-                    // se for, verifica se o vertice de destino já foi visitado
-                    (void) getVertice(aresta->destino->getNome(), &indiceVerticeDestino);
-                    if(verticesVisitados[indiceVerticeDestino] == 0){
-                        // se não foi visitado, verifica se a distancia do vertice de destino é maior que a distancia do vertice atual + o peso da aresta
-                        if(distancia[indiceVerticeDestino] > distancia[verticeAtual.first] + aresta->getPeso() || distancia[indiceVerticeDestino] == -1){
-                            // se for, atualiza a distancia do vertice de destino
+            // Para cada aresta do vértice atual
+            for (auto aresta : arestas) {
+                // Verifica se a aresta é do vértice atual para outro vértice
+                if (aresta->origem->getNome() == vertices[verticeAtual.first]->getNome()) {
+                    // Se for, verifica se o vértice de destino já foi visitado
+                    (void)getVertice(aresta->destino->getNome(), &indiceVerticeDestino);
+                    if (verticesVisitados[indiceVerticeDestino] == 0) {
+                        // Se não foi visitado, verifica se a distância do vértice de destino é maior que a distância do vértice atual + o peso da aresta
+                        if (distancia[indiceVerticeDestino] > distancia[verticeAtual.first] + aresta->getPeso() || distancia[indiceVerticeDestino] == -1) {
+                            // Se for, atualiza a distância do vértice de destino
                             distancia[indiceVerticeDestino] = distancia[verticeAtual.first] + aresta->getPeso();
-                            // insere o vertice de destino na fila de prioridade
+                            // Atualiza o antecessor do vértice de destino
+                            antecessor[indiceVerticeDestino] = verticeAtual.first;
+                            // Insere o vértice de destino na fila de prioridade
                             filaPrioridade.push_back(std::make_pair(indiceVerticeDestino, distancia[indiceVerticeDestino]));
-                            caminho.push_back(vertices[verticeAtual.first]->getNome());
                         }
                     }
                 }
@@ -263,8 +265,8 @@ float Grafo::mostraMenorCaminho(std::string nomeVerticeOrigem, std::string nomeV
         }
     }
 
-    // encontra o indice do vertice de destino e retorna sua distancia
-    (void) getVertice(nomeVerticeDestino, &indiceVerticeDestino);
+    // Encontra o índice do vértice de destino e retorna sua distância
+    (void)getVertice(nomeVerticeDestino, &indiceVerticeDestino);
     return distancia[indiceVerticeDestino];
 }
 
@@ -295,4 +297,18 @@ void Grafo::mostraVerticeComMaiorGrau(){
     }
 
     std::cout << "Vertice com maior grau: " << vertices.at(indiceMaiorGrau)->getNome() << std::endl;
+}
+
+std::vector<std::string> Grafo::removeDuplicados(std::vector<std::string> vetor){
+    // remove os elementos duplicados de um vetor
+
+    for(unsigned i = 0; i < vetor.size(); i++){
+        for(unsigned j = vetor.size()-1; j < i; j--){
+            if(vetor[i] == vetor[j]){
+                vetor.erase(vetor.begin() + j);
+            }
+        }
+    }
+
+    return vetor;
 }
