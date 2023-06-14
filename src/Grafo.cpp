@@ -298,17 +298,3 @@ void Grafo::mostraVerticeComMaiorGrau(){
 
     std::cout << "Vertice com maior grau: " << vertices.at(indiceMaiorGrau)->getNome() << std::endl;
 }
-
-std::vector<std::string> Grafo::removeDuplicados(std::vector<std::string> vetor){
-    // remove os elementos duplicados de um vetor
-
-    for(unsigned i = 0; i < vetor.size(); i++){
-        for(unsigned j = vetor.size()-1; j < i; j--){
-            if(vetor[i] == vetor[j]){
-                vetor.erase(vetor.begin() + j);
-            }
-        }
-    }
-
-    return vetor;
-}
