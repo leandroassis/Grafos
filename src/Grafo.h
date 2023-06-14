@@ -20,7 +20,7 @@ class Grafo{
         void mostraEnlacesVertices();
         void mostraMatrizAdjacencia();
         void mostraMenorCaminho(Vertice *, Vertice *);
-        void verificaConectividade();
+        int verificaConectividade();
         void mostraVerticeComMaiorGrau();
 
     private:

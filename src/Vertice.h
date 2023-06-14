@@ -8,8 +8,12 @@ class Vertice{
         Vertice(std::string);
 
         std::string getNome();
+        
+        float getGrau();
+        void setGrau(float);
     private:
         std::string nome;
+        float grau;
 };
 
 #endif

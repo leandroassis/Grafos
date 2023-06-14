@@ -4,14 +4,13 @@
 #include "Vertice.h"
 
 class Aresta{
+    friend class Grafo;
     public:
         // construtor da classe Aresta
         Aresta(Vertice *, Vertice *, float);
 
         // getters
         float getPeso();
-        void getVertices(std::string *, std::string *);
-
     private:
         // elementos da aresta do grafo
         Vertice *origem, *destino;

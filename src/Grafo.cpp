@@ -133,11 +133,9 @@ void Grafo::mostraEnlacesVertices(){
     for (auto vertice : vertices){
         std::cout << vertice->getNome() << ": ";
         int enlaces = 0;
-        std::string nomeVerticeTemp1, nomeVerticeTemp2;
         for(auto aresta : arestas){
-            aresta->getVertices(&nomeVerticeTemp1, &nomeVerticeTemp2);
-            if(nomeVerticeTemp1 == vertice->getNome()) enlaces++;
-            if(nomeVerticeTemp2 == vertice->getNome()) enlaces++;
+            if(aresta->origem->getNome() == vertice->getNome()) enlaces++;
+            if(aresta->destino->getNome() == vertice->getNome()) enlaces++;
         }
         std::cout << enlaces << std::endl;
     }
@@ -149,17 +147,15 @@ void Grafo::mostraMatrizAdjacencia(){
     // para cada vertice de origem escolhido
     for(auto verticeOrigem : vertices){
         // verifica todos os vertices remanescentes
+        
         for(auto verticeDestino : vertices){
 
             // verifica se existe uma aresta entre os vertices
             for(auto aresta : arestas){
-                std::string nomeVerticeTemp1, nomeVerticeTemp2;
-                aresta->getVertices(&nomeVerticeTemp1, &nomeVerticeTemp2);
-
-                if((nomeVerticeTemp1 == verticeOrigem->getNome() && nomeVerticeTemp2 == verticeDestino->getNome()) \
-                || (nomeVerticeTemp1 == verticeDestino->getNome() && nomeVerticeTemp2 == verticeOrigem->getNome())){
+                if((aresta->origem->getNome() == verticeOrigem->getNome() && aresta->destino->getNome() == verticeDestino->getNome()) \
+                || (aresta->origem->getNome() == verticeDestino->getNome() && aresta->destino->getNome() == verticeOrigem->getNome())){
                     // se existe, mostra o peso da aresta
-                    std::cout << aresta->getPeso() << " ";
+                    std::cout <<  aresta->getPeso() << " ";
                     goto proximoVertice;
                 }
             }
@@ -171,4 +167,28 @@ void Grafo::mostraMatrizAdjacencia(){
         }
         std::cout << std::endl;
     }
+}
+
+int Grafo::verificaConectividade(){
+    // verifica se o grafo é conexo
+
+    // verificar se existe caminho entre todos os vertices
+
+    return 1;
+}
+
+void Grafo::mostraVerticeComMaiorGrau(){
+    // mostra o vertice com maior grau
+
+    unsigned indiceMaiorGrau = 0;
+
+    for(unsigned i = 0; i < vertices.size(); i++){
+        for(auto aresta : arestas){
+            if(aresta->origem->getNome() == vertices[i]->getNome() || aresta->destino->getNome() == vertices[i]->getNome()) vertices[i]->setGrau(aresta->getPeso() + vertices[i]->getGrau());
+        }
+
+        if(vertices[i]->getGrau() > vertices.at(indiceMaiorGrau)->getGrau()) indiceMaiorGrau = i;
+    }
+
+    std::cout << "Vertice com maior grau: " << vertices.at(indiceMaiorGrau)->getNome() << std::endl;
 }
