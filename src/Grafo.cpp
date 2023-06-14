@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <bits/stdc++.h>
+#include <set>
 #include <utility>
 #include "Grafo.h"
 
@@ -46,6 +47,7 @@ Grafo::Grafo(){
         
         // cria uma aresta linkando os vértices de origem e destino e insere no gráfico
         insereAresta(vertices[indiceVerticeOrigem], vertices[indiceVerticeDestino], pesosArestas.at(i));
+        insereAresta(vertices[indiceVerticeDestino], vertices[indiceVerticeOrigem], pesosArestas.at(i));
     }
 }
 
@@ -138,7 +140,7 @@ void Grafo::mostraEnlacesVertices(){
             if(aresta->origem->getNome() == vertice->getNome()) enlaces++;
             if(aresta->destino->getNome() == vertice->getNome()) enlaces++;
         }
-        std::cout << enlaces << std::endl;
+        std::cout << enlaces/2 << std::endl;
     }
 }
 
@@ -226,8 +228,11 @@ float Grafo::mostraMenorCaminho(std::string nomeVerticeOrigem, std::string nomeV
 
 
                 if(saida == 1){
-                    //std::cout << nomeVerticeOrigem << "->";
-                    for(unsigned i = 1; i < caminho.size(); i++){
+                    // dropa os vértices duplicados
+                    std::set<std::string> tempSet(caminho.begin(), caminho.end() );
+                    caminho.assign( tempSet.begin(), tempSet.end() );
+
+                    for(unsigned i = 0; i < caminho.size(); i++){
                         std::cout << caminho[i] << "->";
                     }
                     std::cout << nomeVerticeDestino << std::endl;
@@ -266,7 +271,12 @@ float Grafo::mostraMenorCaminho(std::string nomeVerticeOrigem, std::string nomeV
 int Grafo::verificaConectividade(){
     // verifica se o grafo é conexo
 
-    // verificar se existe caminho entre todos os vertices
+    // se for possível chegar em todos os vertices a partir de um vertice, o grafo é conexo
+    for(auto verticeOrigem : vertices){
+        for(auto verticeDestino : vertices){
+            if(mostraMenorCaminho(verticeOrigem->getNome(), verticeDestino->getNome(), 0) == -1) return 0;
+        }
+    }
 
     return 1;
 }
