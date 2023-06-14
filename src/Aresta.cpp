@@ -1,12 +1,12 @@
 #include "Aresta.h"
 
-Aresta::Aresta(Vertice *verticeOrigem, Vertice *verticeDestino, unsigned float pesoAresta){
+Aresta::Aresta(Vertice *verticeOrigem, Vertice *verticeDestino, float pesoAresta){
     origem = verticeOrigem;
     destino = verticeDestino;
     peso = pesoAresta;
 }
 
-unsigned float Aresta::getPeso(){
+float Aresta::getPeso(){
     return peso;
 }
 

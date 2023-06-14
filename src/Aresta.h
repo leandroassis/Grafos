@@ -6,16 +6,16 @@
 class Aresta{
     public:
         // construtor da classe Aresta
-        Aresta(Vertice *, Vertice *, unsigned float);
+        Aresta(Vertice *, Vertice *, float);
 
         // getters
-        unsigned float getPeso();
+        float getPeso();
         void getVertices(std::string *, std::string *);
 
     private:
         // elementos da aresta do grafo
         Vertice *origem, *destino;
-        unsigned float peso;
+        float peso;
 };
 
 #endif

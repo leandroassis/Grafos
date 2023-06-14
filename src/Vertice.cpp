@@ -1,7 +1,7 @@
 #include "Vertice.h"
 
 Vertice::Vertice(std::string nomeVertice){
-    nome = nomeVertice;
+    this->nome = nomeVertice;
 }
 
 std::string Vertice::getNome(){

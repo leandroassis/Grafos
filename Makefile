@@ -3,14 +3,14 @@ OBJ = $(SRC:.cpp=.o)
 
 CFLAGS = -std=c++11 -Wall
 
-all: grafo clean
-	@echo "Compilando..."
+all: grafo
+	@echo "Compilação finalizada."
 
 %.o: %.cpp
-	$(CC) -c -o $@ $< $(CFLAGS)
+	g++ -c -o $@ $< $(CFLAGS)
 
 grafo: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+	g++ -o $@ $^ $(CFLAGS)
 
 clean:
 	rm -f $(OBJ) grafo
