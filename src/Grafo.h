@@ -19,7 +19,7 @@ class Grafo{
         // funções de apresentação do Exercício
         void mostraEnlacesVertices();
         void mostraMatrizAdjacencia();
-        void mostraMenorCaminho(Vertice *, Vertice *);
+        float mostraMenorCaminho(std::string, std::string, int = 0);
         int verificaConectividade();
         void mostraVerticeComMaiorGrau();
 
