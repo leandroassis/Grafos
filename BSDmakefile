@@ -1,4 +1,4 @@
-CPPFLAGS = -Wall -std=c++11
+CPPFLAGS = -Wall -std=c++11 -D_GLIBCXX_USE_C99 -D_GLIBCXX_USE_C99_MATH -D_GLIBCXX_USE_C99_MATH_TR1
 
 all: grafo
 
