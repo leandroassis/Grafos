@@ -6,5 +6,7 @@ int main(int argc, char *argv[]){
 
     grafo.mostraEnlacesVertices();
 
+    grafo.mostraMatrizAdjacencia();
+
     return 0;
 }

@@ -143,3 +143,32 @@ void Grafo::mostraEnlacesVertices(){
     }
 }
 
+void Grafo::mostraMatrizAdjacencia(){
+    // mostra a matriz de adjacencia do grafo
+
+    // para cada vertice de origem escolhido
+    for(auto verticeOrigem : vertices){
+        // verifica todos os vertices remanescentes
+        for(auto verticeDestino : vertices){
+
+            // verifica se existe uma aresta entre os vertices
+            for(auto aresta : arestas){
+                std::string nomeVerticeTemp1, nomeVerticeTemp2;
+                aresta->getVertices(&nomeVerticeTemp1, &nomeVerticeTemp2);
+
+                if((nomeVerticeTemp1 == verticeOrigem->getNome() && nomeVerticeTemp2 == verticeDestino->getNome()) \
+                || (nomeVerticeTemp1 == verticeDestino->getNome() && nomeVerticeTemp2 == verticeOrigem->getNome())){
+                    // se existe, mostra o peso da aresta
+                    std::cout << aresta->getPeso() << " ";
+                    goto proximoVertice;
+                }
+            }
+
+            // se não existe, mostra 0
+            std::cout << "NaN ";
+
+            proximoVertice:;
+        }
+        std::cout << std::endl;
+    }
+}

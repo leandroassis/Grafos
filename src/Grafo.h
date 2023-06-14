@@ -30,6 +30,7 @@ class Grafo{
         // funções auxiliares
         int existeVertice(std::string);
         int parseArquivoEntrada(std::vector<std::string> *, std::vector<std::string> *, std::vector<float> *);
+
         // djikstra
 };
 
